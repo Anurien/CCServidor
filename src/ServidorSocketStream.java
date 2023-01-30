@@ -28,44 +28,47 @@ public class ServidorSocketStream {
             OutputStream os = newSocket.getOutputStream();
 
             byte[] mensaje = new byte[25];
-            is.read(mensaje);
-
-            /*InputStream entrada = nuevoSocket.getInputStream();
-            OutputStream salida = nuevoSocket.getOutputStream();*/
+            // is.read(mensaje);
 
             int resultado;
-            int operador = 6;
-            int[] operando = new int[10];
+            // is.read();
+            int operador = is.read(mensaje);
             switch (operador) {
+                InputStream is1 = newSocket.getInputStream();
+                byte[] operando = new byte[10];
+                is1.read(operando);
                 case 1:
-                    resultado = operando[0] / 120;
+                    resultado = Integer.parseInt(new String(operando)) / 120;
                     System.out.println("El resultado es : " + resultado + "campos de fútbol");
+                    os.write();
                 case 2:
-                    resultado = 420 - operando[0];
+                    resultado = 420 - Integer.parseInt(new String(operando));
                     System.out.println("Te quedan " + resultado + "meses para llegar a la jubilación completa");
+                    os.write();
                 case 3:
-                    resultado = operando[0] / 34;
+                    resultado = Integer.parseInt(new String(operando)) / 34;
                     System.out.println("El resultado es : " + resultado + "libros de Pérez-Reverte");
+                    os.write();
                 case 4:
-                    resultado = (int) (operando[0] - 1.397);
+                    resultado = (int) (Integer.parseInt(new String(operando)) - 1.397);
                     System.out.println("La diferencia es de : " + Math.abs(resultado) + "€");
+                    os.write();
                 case 5:
+                    System.out.println("Cerrando el nuevo socket");
+
                     newSocket.close();
+
+                    System.out.println("Cerrando el socket servidor");
+
                     serverSocket.close();
+
+                    System.out.println("Terminado");
 
             }
 
             System.out.println("Mensaje recibido: " + new String(mensaje));
+            os.write();
 
-            System.out.println("Cerrando el nuevo socket");
-
-            newSocket.close();
-
-            System.out.println("Cerrando el socket servidor");
-
-            serverSocket.close();
-
-            System.out.println("Terminado");
 
         } catch (IOException e) {
         }
