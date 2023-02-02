@@ -1,9 +1,8 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.util.Arrays;
 
 public class ServidorSocketStream {
 
@@ -15,7 +14,7 @@ public class ServidorSocketStream {
 
             System.out.println("Realizando el bind");
 
-            InetSocketAddress addr = new InetSocketAddress("10.0.9.14", 5555);
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5555);
             serverSocket.bind(addr);
 
             System.out.println("Aceptando conexiones");
@@ -26,48 +25,50 @@ public class ServidorSocketStream {
 
             InputStream is = newSocket.getInputStream();
             OutputStream os = newSocket.getOutputStream();
+            DataInputStream eis = new DataInputStream(is);
+            DataOutputStream sos = new DataOutputStream(os);
 
-            byte[] mensaje = new byte[25];
-            // is.read(mensaje);
+            int mensaje = eis.readInt();
+            int operador = mensaje;
+
 
             int resultado;
-            // is.read();
-            int operador = is.read(mensaje);
+            System.out.println("Esperando al 1er numero...");
+            int operando = eis.readInt();
+            System.out.println("El numero recibido es: " + operando);
             switch (operador) {
-                InputStream is1 = newSocket.getInputStream();
-                byte[] operando = new byte[10];
-                is1.read(operando);
-                case 1:
-                    resultado = Integer.parseInt(new String(operando)) / 120;
-                    System.out.println("El resultado es : " + resultado + "campos de fútbol");
-                    os.write();
-                case 2:
-                    resultado = 420 - Integer.parseInt(new String(operando));
-                    System.out.println("Te quedan " + resultado + "meses para llegar a la jubilación completa");
-                    os.write();
-                case 3:
-                    resultado = Integer.parseInt(new String(operando)) / 34;
-                    System.out.println("El resultado es : " + resultado + "libros de Pérez-Reverte");
-                    os.write();
-                case 4:
-                    resultado = (int) (Integer.parseInt(new String(operando)) - 1.397);
-                    System.out.println("La diferencia es de : " + Math.abs(resultado) + "€");
-                    os.write();
-                case 5:
+                case 1 -> {
+                    resultado = operando / 34;
+                    System.out.println("El resultado es : " + resultado + " libros de Pérez-Reverte");
+                    sos.writeInt(1);
+                    sos.writeUTF("El resultado es : " + resultado + " libros de Pérez-Reverte");
+                }
+                case 2 -> {
+                    resultado = operando / 120;
+                    System.out.println("El resultado es : " + resultado + " campos de fútbol");
+                    sos.writeInt(2);
+                    sos.writeUTF("El resultado es : " + resultado + " campos de fútbol");
+                }
+                case 3 -> {
+                    resultado = 420 - operando;
+                    System.out.println("Te quedan " + resultado + " meses para llegar a la jubilación completa");
+                    sos.writeInt(3);
+                    sos.writeUTF("Te quedan " + resultado + " meses para llegar a la jubilación completa");
+                }
+                case 4 -> {
+                    resultado = (int) (operando - 1.397);
+                    System.out.println("La diferencia es de : " + Math.abs(resultado) + " €");
+                    sos.writeInt(4);
+                    sos.writeUTF("La diferencia es de : " + Math.abs(resultado) + " €");
+                }
+                case 5 -> {
                     System.out.println("Cerrando el nuevo socket");
-
                     newSocket.close();
-
                     System.out.println("Cerrando el socket servidor");
-
                     serverSocket.close();
-
                     System.out.println("Terminado");
-
+                }
             }
-
-            System.out.println("Mensaje recibido: " + new String(mensaje));
-            os.write();
 
 
         } catch (IOException e) {
