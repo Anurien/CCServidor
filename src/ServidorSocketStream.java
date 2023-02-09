@@ -42,13 +42,18 @@ public class ServidorSocketStream {
                     }
                     case 2 -> {
                         resultado = operando / 120;
-                        System.out.println("El resultado es : " + resultado + " campos de fútbol");
-                        sos.writeUTF("El resultado es : " + resultado + " campos de fútbol");
+                        System.out.println("El resultado es : " + Math.abs(resultado) + " campos de fútbol");
+                        sos.writeUTF("El resultado es : " + Math.abs(resultado) + " campos de fútbol");
                     }
                     case 3 -> {
                         resultado = 420 - operando * 12;
-                        System.out.println("Te quedan " + resultado + " meses para llegar a la jubilación completa");
-                        sos.writeUTF("Te quedan " + resultado + " meses para llegar a la jubilación completa");
+                        if(resultado<=0){
+                            System.out.println(resultado + " Jubiladísimo");
+                            sos.writeUTF(resultado + " Jubiladísimo");
+                        }else{
+                            System.out.println("Te quedan " + resultado + " meses para llegar a la jubilación completa");
+                            sos.writeUTF("Te quedan " + resultado + " meses para llegar a la jubilación completa");
+                        }
                     }
                     case 4 -> {
                         resultado = (int) (operando - 1.397);
@@ -62,9 +67,9 @@ public class ServidorSocketStream {
             }
 
             System.out.println("Cerrando el nuevo socket");
-            //newSocket.close();
+            newSocket.close();
             System.out.println("Cerrando el socket servidor");
-            //serverSocket.close();
+            serverSocket.close();
             System.out.println("Terminado");
 
 
